@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Language & Passions Questionnaire</title>
+
+  <!-- SurveyJS core + UI -->
+  <link rel="stylesheet" href="https://unpkg.com/survey-core/survey-core.min.css">
+  <script src="https://unpkg.com/survey-core/survey.core.min.js"></script>
+  <script src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
+
+  <!-- A modern built-in theme (recommended approach) -->
+  <script src="https://unpkg.com/survey-core/themes/layered-light-panelless.min.js"></script>
+
+  <style>
+    :root{
+      --bg1:#f7f7ff;
+      --bg2:#f2fbff;
+      --card:#ffffffcc;
+      --stroke:#e7e7ee;
+      --text:#0f172a;
+      --muted:#64748b;
+      --shadow: 0 20px 60px rgba(15, 23, 42, .10);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, var(--bg2), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, var(--bg1), transparent 55%),
+        linear-gradient(180deg, #ffffff, #fafafa);
+      padding: 22px;
+    }
+
+    .wrap{ max-width: 980px; margin: 0 auto; }
+
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom: 16px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: clamp(22px, 2.6vw, 34px);
+      letter-spacing:-0.02em;
+    }
+
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.35;
+      max-width: 56ch;
+    }
+
+    .pill{
+      align-self:flex-start;
+      padding: 8px 12px;
+      border:1px solid var(--stroke);
+      background:#fff;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      box-shadow: 0 8px 24px rgba(15,23,42,.05);
+      user-select:none;
+    }
+
+    .card{
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    #surveyContainer{
+      margin-top: 4px;
+    }
+
+    .status{
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--muted);
+      font-size: 13px;
+      display:none;
+    }
+    .status.show{ display:block; }
+    .status.ok{ border-color:#bbf7d0; background:#f0fdf4; color:#166534; }
+    .status.err{ border-color:#fecaca; background:#fef2f2; color:#991b1b; }
+
+    footer{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* Small screens */
+    @media (max-width: 640px){
+      body{ padding:14px; }
+      .card{ padding:14px; }
+      header{ flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Language & Passions</h1>
+        <p>
+          Add passions → contexts → languages. Fill only what you know, and you can modify anytime before submitting.
+        </p>
+      </div>
+      <div class="pill">Student questionnaire • SurveyJS</div>
+    </header>
+
+    <div class="card">
+      <div id="surveyContainer"></div>
+      <div id="status" class="status"></div>
+
+      <footer>
+        Tip: if the page is blank, open DevTools → Console. Most issues are a missing JSON paste or a wrong webhook URL.
+      </footer>
+    </div>
+  </div>
+
+  <!-- ✅ Paste your FULL SurveyJS JSON here (pure JSON, no trailing commas) -->
+  <script id="survey-json" type="application/json">
+  {
+  "title": "Language & Passions Questionnaire",
+  "description": "Fill in as many details as you want. You can add multiple passions, contexts, and languages.",
+  "completedHtml": "<h3>Thank you!</h3><p><b>Main linguistic profile:</b> {profileTitle}<br/><b>Engagement:</b> {engagement}<br/><b>Modality (derived):</b> {style}</p>",
+  "pages": [
+    {
+      "name": "identity",
+      "title": "About you",
+      "elements": [
+        {
+          "type": "text",
+          "name": "student_full_name",
+          "title": "Full name",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "student_email",
+          "title": "Email",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "email"
+            }
+          ],
+          "inputType": "email"
+        },
+        {
+          "type": "dropdown",
+          "name": "grade",
+          "title": "Grade / Class level",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "grade6",
+              "text": "Grade 6"
+            },
+            {
+              "value": "grade7",
+              "text": "Grade 7"
+            },
+            {
+              "value": "grade8",
+              "text": "Grade 8"
+            },
+            {
+              "value": "grade9",
+              "text": "Grade 9"
+            },
+            {
+              "value": "grade10",
+              "text": "Grade 10"
+            },
+            {
+              "value": "grade11",
+              "text": "Grade 11"
+            },
+            {
+              "value": "grade12",
+              "text": "Grade 12"
+            },
+            {
+              "value": "college",
+              "text": "College / University"
+            },
+            {
+              "value": "other",
+              "text": "Other"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "name": "age",
+          "title": "Age",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "numeric",
+              "minValue": 5,
+              "maxValue": 99
+            }
+          ],
+          "inputType": "number"
+        }
+      ]
+    },
+    {
+      "name": "passions_page",
+      "title": "Passions → Contexts → Languages",
+      "description": "Add at least one passion. For each passion, you can add one or more contexts. For each context, you can add one or more languages.",
+      "elements": [
+        {
+          "type": "paneldynamic",
+          "name": "passions",
+          "title": "Your passions",
+          "templateElements": [
+            {
+              "type": "dropdown",
+              "name": "passionItem",
+              "title": "1) Choose a passion",
+              "isRequired": true,
+              "choices": [
+                {
+                  "value": "read_text",
+                  "text": "Reading a text"
+                },
+                {
+                  "value": "write_stories",
+                  "text": "Writing stories"
+                },
+                {
+                  "value": "draw",
+                  "text": "Drawing"
+                },
+                {
+                  "value": "take_photos",
+                  "text": "Taking photos"
+                },
+                {
+                  "value": "edit_videos",
+                  "text": "Editing videos"
+                },
+                {
+                  "value": "create_online_content",
+                  "text": "Creating online content"
+                },
+                {
+                  "value": "watch_films_series",
+                  "text": "Watching films / series"
+                },
+                {
+                  "value": "watch_tutorials",
+                  "text": "Watching tutorials"
+                },
+                {
+                  "value": "listen_music",
+                  "text": "Listening to music"
+                },
+                {
+                  "value": "sing",
+                  "text": "Singing"
+                },
+                {
+                  "value": "play_instrument",
+                  "text": "Playing an instrument"
+                },
+                {
+                  "value": "listen_podcasts",
+                  "text": "Listening to podcasts"
+                },
+                {
+                  "value": "play_video_games",
+                  "text": "Playing video games"
+                },
+                {
+                  "value": "board_games",
+                  "text": "Playing board games"
+                },
+                {
+                  "value": "phone_calls",
+                  "text": "Talking on the phone"
+                },
+                {
+                  "value": "do_research",
+                  "text": "Doing research"
+                },
+                {
+                  "value": "describe_passion",
+                  "text": "Describing your passion"
+                },
+                {
+                  "value": "role_play",
+                  "text": "Role play (theatre)"
+                },
+                {
+                  "value": "sports",
+                  "text": "Doing sports"
+                },
+                {
+                  "value": "visit_museum",
+                  "text": "Visiting a museum"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "name": "passionDetail",
+              "title": "Optional: clarify / specify your passion",
+              "description": "Example: 'reading fantasy novels', 'football', 'editing TikTok videos'..."
+            },
+            {
+              "type": "expression",
+              "name": "passion_oral_tag",
+              "visible": false,
+              "expression": "iif({panel.passionItem} = 'watch_films_series' or {panel.passionItem} = 'watch_tutorials' or {panel.passionItem} = 'listen_music' or {panel.passionItem} = 'sing' or {panel.passionItem} = 'play_instrument' or {panel.passionItem} = 'listen_podcasts' or {panel.passionItem} = 'board_games' or {panel.passionItem} = 'phone_calls' or {panel.passionItem} = 'role_play' or {panel.passionItem} = 'sports' or {panel.passionItem} = 'visit_museum', 1, 0)"
+            },
+            {
+              "type": "expression",
+              "name": "passion_written_tag",
+              "visible": false,
+              "expression": "iif({panel.passionItem} = 'read_text' or {panel.passionItem} = 'write_stories' or {panel.passionItem} = 'draw' or {panel.passionItem} = 'take_photos' or {panel.passionItem} = 'edit_videos' or {panel.passionItem} = 'create_online_content' or {panel.passionItem} = 'play_video_games' or {panel.passionItem} = 'do_research' or {panel.passionItem} = 'describe_passion', 1, 0)"
+            },
+            {
+              "type": "paneldynamic",
+              "name": "contexts",
+              "title": "2) Context(s) for this passion",
+              "templateElements": [
+                {
+                  "type": "dropdown",
+                  "name": "contextItem",
+                  "title": "Choose a context",
+                  "isRequired": true,
+                  "choices": [
+                    {
+                      "value": "alone_reader",
+                      "text": "Alone (reader)"
+                    },
+                    {
+                      "value": "family",
+                      "text": "Family"
+                    },
+                    {
+                      "value": "friends",
+                      "text": "Friends"
+                    },
+                    {
+                      "value": "school",
+                      "text": "School"
+                    },
+                    {
+                      "value": "internet",
+                      "text": "Internet"
+                    },
+                    {
+                      "value": "future_work",
+                      "text": "Future job"
+                    },
+                    {
+                      "value": "other_country",
+                      "text": "Another country"
+                    }
+                  ]
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_oral_tag",
+                  "visible": false,
+                  "expression": "iif({panel.contextItem} = 'family' or {panel.contextItem} = 'friends' or {panel.contextItem} = 'other_country', 1, 0)"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_written_tag",
+                  "visible": false,
+                  "expression": "iif({panel.contextItem} = 'alone_reader' or {panel.contextItem} = 'school' or {panel.contextItem} = 'internet' or {panel.contextItem} = 'future_work', 1, 0)"
+                },
+                {
+                  "type": "paneldynamic",
+                  "name": "languages",
+                  "title": "3) Language(s) used in this context",
+                  "templateElements": [
+                    {
+                      "type": "dropdown",
+                      "name": "languageCode",
+                      "title": "Language",
+                      "isRequired": true,
+                      "choices": [
+                        {
+                          "value": "EN",
+                          "text": "English"
+                        },
+                        {
+                          "value": "FR",
+                          "text": "French"
+                        },
+                        {
+                          "value": "ES",
+                          "text": "Spanish"
+                        },
+                        {
+                          "value": "AR",
+                          "text": "Arabic"
+                        },
+                        {
+                          "value": "DE",
+                          "text": "German"
+                        },
+                        {
+                          "value": "IT",
+                          "text": "Italian"
+                        },
+                        {
+                          "value": "PT",
+                          "text": "Portuguese"
+                        },
+                        {
+                          "value": "ZH",
+                          "text": "Chinese"
+                        },
+                        {
+                          "value": "JA",
+                          "text": "Japanese"
+                        },
+                        {
+                          "value": "KO",
+                          "text": "Korean"
+                        },
+                        {
+                          "value": "RU",
+                          "text": "Russian"
+                        },
+                        {
+                          "value": "OTHER",
+                          "text": "Other (type it)"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "name": "languageOtherName",
+                      "visibleIf": "{panel.languageCode} = 'OTHER'",
+                      "title": "Which language?",
+                      "isRequired": true
+                    },
+                    {
+                      "type": "text",
+                      "name": "years",
+                      "title": "How many years?",
+                      "validators": [
+                        {
+                          "type": "numeric",
+                          "minValue": 0,
+                          "maxValue": 99
+                        }
+                      ],
+                      "inputType": "number"
+                    },
+                    {
+                      "type": "dropdown",
+                      "name": "frequency",
+                      "title": "Frequency",
+                      "choices": [
+                        {
+                          "value": 0,
+                          "text": "Never / almost never"
+                        },
+                        {
+                          "value": 1,
+                          "text": "Rarely"
+                        },
+                        {
+                          "value": 2,
+                          "text": "Sometimes"
+                        },
+                        {
+                          "value": 3,
+                          "text": "Often"
+                        },
+                        {
+                          "value": 4,
+                          "text": "Every day"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "boolean",
+                      "name": "wantIncrease",
+                      "title": "Want to practice more ?",
+                      "labelTrue": "Yes",
+                      "labelFalse": "No"
+                    },
+                    {
+                      "type": "expression",
+                      "name": "lang_fm",
+                      "visible": false,
+                      "expression": "iif({panel.languageCode} = 'EN', 0, iif({panel.frequency} empty, 0, {panel.frequency}) + iif({panel.wantIncrease}, 1, 0))"
+                    },
+                    {
+                      "type": "expression",
+                      "name": "lang_years_nonEN",
+                      "visible": false,
+                      "expression": "iif({panel.languageCode} = 'EN' or {panel.years} empty, 0, {panel.years})"
+                    }
+                  ],
+                  "templateTitle": "Language #{panelIndex}",
+                  "panelCount": 1,
+                  "minPanelCount": 1,
+                  "panelsState": "firstExpanded",
+                  "addPanelText": "Add another language",
+                  "removePanelText": "Remove this language"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_fm_total",
+                  "visible": false,
+                  "expression": "sumInArray({panel.languages}, 'lang_fm')"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_years_nonEN",
+                  "visible": false,
+                  "expression": "sumInArray({panel.languages}, 'lang_years_nonEN')"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_family_years_nonEN",
+                  "visible": false,
+                  "expression": "iif({panel.contextItem} = 'family', sumInArray({panel.languages}, 'lang_years_nonEN'), 0)"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_nonEN_lang_entries",
+                  "visible": false,
+                  "expression": "countInArray({panel.languages}, 'languageCode', {languageCode} <> 'EN' and {years} > 0)"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_has_lang",
+                  "visible": false,
+                  "expression": "iif({panel.languages} empty, 0, 1)"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_oral_context_points",
+                  "visible": false,
+                  "expression": "iif({panel.ctx_has_lang} = 1, {panel.ctx_oral_tag}, 0)"
+                },
+                {
+                  "type": "expression",
+                  "name": "ctx_written_context_points",
+                  "visible": false,
+                  "expression": "iif({panel.ctx_has_lang} = 1, {panel.ctx_written_tag}, 0)"
+                }
+              ],
+              "templateTitle": "Context #{panelIndex}",
+              "panelCount": 1,
+              "minPanelCount": 1,
+              "panelsState": "firstExpanded",
+              "addPanelText": "Add another context",
+              "removePanelText": "Remove this context"
+            },
+            {
+              "type": "expression",
+              "name": "passion_has_lang",
+              "visible": false,
+              "expression": "iif(countInArray({panel.contexts}, 'ctx_has_lang', {ctx_has_lang} = 1) > 0, 1, 0)"
+            },
+            {
+              "type": "expression",
+              "name": "passion_fm_total",
+              "visible": false,
+              "expression": "sumInArray({panel.contexts}, 'ctx_fm_total')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_years_nonEN_total",
+              "visible": false,
+              "expression": "sumInArray({panel.contexts}, 'ctx_years_nonEN')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_family_years_nonEN",
+              "visible": false,
+              "expression": "sumInArray({panel.contexts}, 'ctx_family_years_nonEN')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_max_ctx_years_nonEN",
+              "visible": false,
+              "expression": "maxInArray({panel.contexts}, 'ctx_years_nonEN')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_nonEN_context_count",
+              "visible": false,
+              "expression": "countInArray({panel.contexts}, 'ctx_years_nonEN', {ctx_years_nonEN} > 0)"
+            },
+            {
+              "type": "expression",
+              "name": "passion_nonEN_lang_entries",
+              "visible": false,
+              "expression": "sumInArray({panel.contexts}, 'ctx_nonEN_lang_entries')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_contexts_over5_count",
+              "visible": false,
+              "expression": "countInArray({panel.contexts}, 'ctx_years_nonEN', {ctx_years_nonEN} > 5)"
+            },
+            {
+              "type": "expression",
+              "name": "passion_oral_total",
+              "visible": false,
+              "expression": "({panel.passion_oral_tag} * {panel.passion_has_lang}) + sumInArray({panel.contexts}, 'ctx_oral_context_points')"
+            },
+            {
+              "type": "expression",
+              "name": "passion_written_total",
+              "visible": false,
+              "expression": "({panel.passion_written_tag} * {panel.passion_has_lang}) + sumInArray({panel.contexts}, 'ctx_written_context_points')"
+            }
+          ],
+          "templateTitle": "Passion #{panelIndex}",
+          "panelCount": 1,
+          "minPanelCount": 1,
+          "panelsState": "firstExpanded",
+          "addPanelText": "Add another passion",
+          "removePanelText": "Remove this passion"
+        }
+      ]
+    },
+    {
+      "name": "results",
+      "title": "Your profile (preview)",
+      "elements": [
+        {
+          "type": "html",
+          "name": "profile_card",
+          "html": "<div style=\"display:flex; gap:16px; align-items:center; padding:12px; border:1px solid #e5e7eb; border-radius:16px;\"><div style=\"flex:0 0 auto;\"><img src=\"{profileImageUrl}\" alt=\"{profileTitle} illustration\" style=\"width:120px; height:auto; border-radius:16px;\"/></div><div style=\"flex:1 1 auto;\"><h3 style=\"margin:0 0 6px 0;\">{profileTitle}</h3><p style=\"margin:0; line-height:1.35;\">{profileDescription}</p></div></div>"
+        },
+        {
+          "type": "expression",
+          "name": "show_engagement",
+          "title": "Engagement (Active/Passive)",
+          "expression": "{engagement} + ' (FM total, non-English only: ' + {fmTotal} + ')'"
+        },
+        {
+          "type": "expression",
+          "name": "show_modality",
+          "title": "Modality (derived from passions + contexts)",
+          "expression": "{style} + ' (oral score: ' + {oralTotal} + ', written score: ' + {writtenTotal} + ')'"
+        },
+        {
+          "type": "boolean",
+          "name": "emailMyResults",
+          "title": "Do you want to receive your results by email?",
+          "defaultValue": "true",
+          "labelTrue": "Yes, email me my results",
+          "labelFalse": "No thanks"
+        }
+      ]
+    }
+  ],
+  "calculatedValues": [
+    {
+      "name": "fmTotal",
+      "expression": "sumInArray({passions}, 'passion_fm_total')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "passionCount",
+      "expression": "countInArray({passions}, 'passionItem', {passionItem} notempty)",
+      "includeIntoResult": true
+    },
+    {
+      "name": "engagement",
+      "expression": "iif({passionCount} >= 4 and {fmTotal} > 12, 'Active', 'Passive')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "oralTotal",
+      "expression": "sumInArray({passions}, 'passion_oral_total')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "writtenTotal",
+      "expression": "sumInArray({passions}, 'passion_written_total')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "diffOralWritten",
+      "expression": "iif({oralTotal} - {writtenTotal} < 0, {writtenTotal} - {oralTotal}, {oralTotal} - {writtenTotal})",
+      "includeIntoResult": true
+    },
+    {
+      "name": "style",
+      "expression": "iif({oralTotal} < 2 and {writtenTotal} < 2, 'Subi', iif({diffOralWritten} <= 2, 'Mixed', iif({oralTotal} > {writtenTotal}, 'Orator', 'Writer')))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "yearsNonENTotal",
+      "expression": "sumInArray({passions}, 'passion_years_nonEN_total')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "familyYearsNonENTotal",
+      "expression": "sumInArray({passions}, 'passion_family_years_nonEN')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "maxContextYearsNonEN",
+      "expression": "maxInArray({passions}, 'passion_max_ctx_years_nonEN')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "nonENContextCount",
+      "expression": "sumInArray({passions}, 'passion_nonEN_context_count')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "nonENLangEntries",
+      "expression": "sumInArray({passions}, 'passion_nonEN_lang_entries')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "contextsOver5Count",
+      "expression": "sumInArray({passions}, 'passion_contexts_over5_count')",
+      "includeIntoResult": true
+    },
+    {
+      "name": "profileKey",
+      "expression": "iif({nonENLangEntries} < 2, 'MONO_EN', iif({familyYearsNonENTotal} >= ({age} * 0.75), 'BIL_HERITAGE', iif({nonENLangEntries} >= 2 and {nonENContextCount} >= 2 and {yearsNonENTotal} >= ({age} * 0.5), 'PLURILINGUAL', iif({maxContextYearsNonEN} >= ({age} * 0.5), 'BIL_ACQUIRED', iif({maxContextYearsNonEN} <= 5, 'BIL_BECOMING', 'BIL_MODERATE')))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "profileTitle",
+      "expression": "iif({profileKey}='MONO_EN','English speaker (Monolingual)', iif({profileKey}='BIL_HERITAGE','Bilingual (Heritage)', iif({profileKey}='PLURILINGUAL','Plurilingual', iif({profileKey}='BIL_ACQUIRED','Bilingual (Acquired)', iif({profileKey}='BIL_BECOMING','Bilingual in becoming','Bilingual (moderate exposure)')))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "profileDescription",
+      "expression": "iif({profileKey}='MONO_EN','You did not specify enough other languages to consider a bilingual profile. Try again!', iif({profileKey}='BIL_HERITAGE','You have been surrounded by other language speakers (French or any other you mentioned) and that is a great help to improve. Keep trying new activities with friends and family!', iif({profileKey}='PLURILINGUAL','You have learned to switch codes with many languages in various contexts. Congratulations! Do not underestimate your knowledge and find creative ways to use these linguistic skills.', iif({profileKey}='BIL_ACQUIRED','You have practiced this language a lot in a work or school environment, like a disciplined student. You may notice cultural variations depending on the contexts, but you can trust your solid grammar foundations to learn more.', iif({profileKey}='BIL_BECOMING','You started recently to learn this language and you might not see how to progress or use it more. Try involving French or any other language in your passions, and keep up the good work in class. You will progress faster than you think!', 'You have some regular exposure to another language, but not enough sustained use in one context to reach the stronger bilingual profiles yet.')))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "profileImageUrl",
+      "expression": "iif({profileKey}='MONO_EN','https://YOUR_DOMAIN/images/profile_mono.png', iif({profileKey}='BIL_HERITAGE','https://YOUR_DOMAIN/images/profile_heritage.png', iif({profileKey}='PLURILINGUAL','https://YOUR_DOMAIN/images/profile_pluri.png', iif({profileKey}='BIL_ACQUIRED','https://YOUR_DOMAIN/images/profile_acquired.png', iif({profileKey}='BIL_BECOMING','https://YOUR_DOMAIN/images/profile_becoming.png','https://YOUR_DOMAIN/images/profile_moderate.png')))))",
+      "includeIntoResult": true
+    },
+    {
+      "name": "profile",
+      "expression": "{profileTitle} + ': ' + {profileDescription}",
+      "includeIntoResult": true
+    }
+  ]
+}
+  </script>
+
+  <script>
+    const CONFIG = {
+      makeWebhookUrl: "PASTE_YOUR_MAKE_WEBHOOK_URL_HERE",
+      teacherEmail: "PASTE_TEACHER_EMAIL_HERE"
+    };
+
+    const statusEl = document.getElementById("status");
+    function setStatus(kind, msg){
+      statusEl.className = "status show " + (kind || "");
+      statusEl.textContent = msg;
+    }
+
+    function safeJsonParse(scriptId){
+      const el = document.getElementById(scriptId);
+      if(!el) throw new Error("Missing <script id='" + scriptId + "' type='application/json'> block.");
+      const raw = el.textContent.trim();
+      if(!raw) throw new Error("Survey JSON block is empty.");
+      return JSON.parse(raw);
+    }
+
+    function isPlaceholder(s){
+      return !s || String(s).includes("PASTE_");
+    }
+
+    // Escape for HTML emails (basic)
+    function esc(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // Pretty summary (same spirit as your result page)
+    function buildEmailHtml(data){
+      const passions = Array.isArray(data.passions) ? data.passions : [];
+      const list = passions.map(p => {
+        const passion = esc(p.passionItem || "");
+        const detail = p.passionDetail ? (" — " + esc(p.passionDetail)) : "";
+        const contexts = Array.isArray(p.contexts) ? p.contexts : [];
+        const ctxHtml = contexts.map(c => {
+          const ctx = esc(c.contextItem || "");
+          const langs = Array.isArray(c.languages) ? c.languages : [];
+          const langsHtml = langs.map(l => {
+            const lang = l.languageCode === "OTHER" ? (l.languageOtherName || "Other") : (l.languageCode || "");
+            return `<li><b>${esc(lang)}</b> — years: ${esc(l.years)} — freq: ${esc(l.frequency)} — increase: ${l.wantIncrease ? "Yes" : "No"}</li>`;
+          }).join("");
+          return `<li><b>${ctx}</b><ul>${langsHtml || "<li><i>No languages</i></li>"}</ul></li>`;
+        }).join("");
+        return `<li><b>${passion}${detail}</b><ul>${ctxHtml || "<li><i>No contexts</i></li>"}</ul></li>`;
+      }).join("");
+
+      return `
+        <div style="font-family:Arial, sans-serif; line-height:1.4">
+          <h2 style="margin:0 0 8px 0">Language & Passions — Results</h2>
+          <p style="margin:0 0 10px 0">
+            <b>Name:</b> ${esc(data.student_full_name)}<br/>
+            <b>Grade:</b> ${esc(data.grade)}<br/>
+            <b>Age:</b> ${esc(data.age)}
+          </p>
+
+          <div style="padding:12px;border:1px solid #e5e7eb;border-radius:14px;background:#fafafa;margin:0 0 12px 0">
+            <b>Main profile:</b> ${esc(data.profileTitle || data.profile)}<br/>
+            <b>Engagement:</b> ${esc(data.engagement)}<br/>
+            <b>Style:</b> ${esc(data.style)}
+          </div>
+
+          <h3 style="margin:0 0 6px 0">Your answers</h3>
+          <ol style="margin:0;padding-left:20px">${list || "<li><i>No passions provided</i></li>"}</ol>
+
+          <p style="margin-top:12px;font-size:12px;color:#64748b">
+            Teacher copy is also sent to ${esc(CONFIG.teacherEmail)} with a JSON attachment.
+          </p>
+        </div>
+      `;
+    }
+
+    let surveyJson;
+    try {
+      surveyJson = safeJsonParse("survey-json");
+    } catch (e) {
+      setStatus("err", "Survey JSON error: " + e.message);
+      throw e;
+    }
+
+    // Create survey
+    const survey = new Survey.Model(surveyJson);
+
+    // Apply modern theme (SurveyJS recommended approach) :contentReference[oaicite:2]{index=2}
+    try {
+      if (window.SurveyTheme && SurveyTheme.LayeredLightPanelless) {
+        survey.applyTheme(SurveyTheme.LayeredLightPanelless);
+      }
+    } catch (e) {
+      // Theme is optional; survey can still render
+      console.warn("Theme apply failed:", e);
+    }
+
+    // Give students a better UX when saving (SurveyJS supports save progress + errors on complete page) :contentReference[oaicite:3]{index=3}
+    survey.onComplete.add(async (sender, options) => {
+      // If you haven't configured Make yet, don't fail the survey
+      if (isPlaceholder(CONFIG.makeWebhookUrl)) {
+        options?.showSaveError?.("Webhook URL not set. Results were not emailed yet.");
+        return;
+      }
+
+      try {
+        options?.showSaveInProgress?.("Sending your results…");
+
+        const data = sender.data;
+        const payload = {
+          submittedAt: new Date().toISOString(),
+          studentName: data.student_full_name || "",
+          studentEmail: data.student_email || "",
+          wantsEmail: !!data.emailMyResults,
+          emailHtml: buildEmailHtml(data),
+          result: data,
+          resultText: JSON.stringify(data, null, 2)
+        };
+
+        const res = await fetch(CONFIG.makeWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json;charset=UTF-8" },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          options?.showSaveError?.("Could not send results (server responded " + res.status + ").");
+        } else {
+          options?.showSaveSuccess?.("Sent! Check your email if you opted in 🙂");
+        }
+      } catch (e) {
+        console.error(e);
+        options?.showSaveError?.("Could not send results: " + (e?.message || "unknown error"));
+      }
+    });
+
+    // Render
+    document.addEventListener("DOMContentLoaded", () => {
+      try {
+        survey.render(document.getElementById("surveyContainer"));
+        setStatus("", ""); // hide
+        statusEl.classList.remove("show");
+      } catch (e) {
+        setStatus("err", "Render error: " + e.message);
+        console.error(e);
+      }
+    });
+
+    // Catch unexpected errors and show them on the page (so you’re not stuck with a blank screen)
+    window.addEventListener("error", (ev) => {
+      setStatus("err", "JavaScript error: " + (ev.message || "unknown"));
+    });
+  </script>
+</body>
+</html>
