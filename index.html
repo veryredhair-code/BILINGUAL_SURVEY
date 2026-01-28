@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Quiz : What type of bilingual are you?</title>
+  <title>What is your bilingual type?</title>
 
   <link rel="stylesheet" href="https://unpkg.com/survey-core/survey-core.min.css">
   <script src="https://unpkg.com/survey-core/survey.core.min.js"></script>
   <script src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
   <script src="https://unpkg.com/survey-core/themes/layered-light-panelless.min.js"></script>
 
-  <style>
+  
+  <!-- Mindmap rendering (Markmap) -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib/dist/browser/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view/dist/browser/index.min.js"></script>
+<style>
     :root{
       --bg1:#f7f7ff;
       --bg2:#f2fbff;
@@ -68,8 +73,8 @@
   <div class="wrap">
     <header>
       <div class="brand">
-        <h1>What type of bilingual are you?</h1>
-        <p>Describe your passions, and what motivates your in practicing different languages with it.</p>
+        <h1>What is your bilingual type?</h1>
+        <p>To determine what kind of bilingual you are, fill in as many details as you want.</p>
       </div>
       <div class="pill">Student questionnaire • SurveyJS</div>
     </header>
@@ -83,8 +88,8 @@
   <!-- Survey JSON (keep as pure JSON) -->
   <script id="survey-json" type="application/json">
   {
-  "title": "Language & Passions Questionnaire",
-  "description": "Fill in as many details as you want. You can add multiple passions, contexts, and languages.",
+  "title": "What is your bilingual type ?",
+  "description": "To determine what kind of bilingual you are, fill in as many details as you want : You can add multiple passions, contexts, and languages.",
   "completedHtml": "<h3>Thank you!</h3><p><b>Main linguistic profile:</b> {profileTitle}<br/><b>Engagement:</b> {engagement}<br/><b>Modality (derived):</b> {style}</p>",
   "pages": [
     {
@@ -94,7 +99,7 @@
         {
           "type": "text",
           "name": "student_full_name",
-          "title": "Full name",
+          "title": "Name",
           "isRequired": true
         },
         {
@@ -116,18 +121,6 @@
           "isRequired": true,
           "choices": [
             {
-              "value": "grade6",
-              "text": "Grade 6"
-            },
-            {
-              "value": "grade7",
-              "text": "Grade 7"
-            },
-            {
-              "value": "grade8",
-              "text": "Grade 8"
-            },
-            {
               "value": "grade9",
               "text": "Grade 9"
             },
@@ -145,11 +138,11 @@
             },
             {
               "value": "college",
-              "text": "College / University"
+              "text": "Postgraduated"
             },
             {
-              "value": "other",
-              "text": "Other"
+              "value": "grade13",
+              "text": "Teacher in Secondary"
             }
           ]
         },
@@ -171,13 +164,13 @@
     },
     {
       "name": "passions_page",
-      "title": "What are your passions?",
-      "description": "What languages do you use when engaging in your passions, and in what environnements ?",
+      "title": "How do you switch the code ?",
+      "description": "What languages do you use when engaging in your passions ?\nWhat environnements are the most motivating for you ?",
       "elements": [
         {
           "type": "paneldynamic",
           "name": "passions",
-          "title": "Your passions",
+          "title": "What are your hobbies and passions ?",
           "panelCount": 1,
           "minPanelCount": 1,
           "panelsState": "firstExpanded",
@@ -188,7 +181,7 @@
             {
               "type": "dropdown",
               "name": "passionItem",
-              "title": "1) Choose a passion",
+              "title": "Choose an activity",
               "isRequired": true,
               "choices": [
                 {
@@ -201,7 +194,7 @@
                 },
                 {
                   "value": "draw",
-                  "text": "Drawing"
+                  "text": "Drawing and painting"
                 },
                 {
                   "value": "take_photos",
@@ -213,15 +206,11 @@
                 },
                 {
                   "value": "create_online_content",
-                  "text": "Creating online content"
+                  "text": "Creating content"
                 },
                 {
                   "value": "watch_films_series",
                   "text": "Watching films / series"
-                },
-                {
-                  "value": "watch_tutorials",
-                  "text": "Watching tutorials"
                 },
                 {
                   "value": "listen_music",
@@ -244,12 +233,12 @@
                   "text": "Playing video games"
                 },
                 {
-                  "value": "board_games",
-                  "text": "Playing board games"
-                },
-                {
                   "value": "phone_calls",
                   "text": "Talking on the phone"
+                },
+                {
+                  "value": "board_games",
+                  "text": "Playing board games"
                 },
                 {
                   "value": "do_research",
@@ -271,18 +260,19 @@
                   "value": "visit_museum",
                   "text": "Visiting a museum"
                 }
-              ]
+              ],
+              "showOtherItem": true
             },
             {
               "type": "text",
               "name": "passionDetail",
-              "title": "Optional: clarify / specify your passion",
+              "title": "Describe your passion in details (Optional)",
               "description": "Example: 'reading fantasy novels', 'football', 'editing TikTok videos'..."
             },
             {
               "type": "paneldynamic",
               "name": "contexts",
-              "title": "2) Context(s) for this passion",
+              "title": "Which contexts ?",
               "panelCount": 1,
               "minPanelCount": 1,
               "panelsState": "firstExpanded",
@@ -293,55 +283,60 @@
                 {
                   "type": "dropdown",
                   "name": "contextItem",
-                  "title": "Choose a context",
+                  "title": "Choose where and with who",
                   "isRequired": true,
                   "choices": [
                     {
                       "value": "alone_reader",
-                      "text": "Alone (reader)"
+                      "text": "Alone"
                     },
                     {
                       "value": "family",
-                      "text": "Family"
+                      "text": "With family"
                     },
                     {
                       "value": "friends",
-                      "text": "Friends"
+                      "text": "With friends"
                     },
                     {
                       "value": "school",
-                      "text": "School"
+                      "text": "At school"
                     },
                     {
                       "value": "internet",
-                      "text": "Internet"
+                      "text": "On internet"
                     },
                     {
                       "value": "future_work",
-                      "text": "Future job"
+                      "text": "For my (future) job"
                     },
                     {
                       "value": "other_country",
-                      "text": "Another country"
+                      "text": "In another country"
+                    },
+                    {
+                      "value": "after_school",
+                      "text": "After school"
                     }
-                  ]
+                  ],
+                  "showOtherItem": true
                 },
                 {
                   "type": "expression",
                   "name": "ctx_oral_tag",
                   "visible": false,
-                  "expression": "iif({panel.contextItem} = 'alone_reader',0, iif({panel.contextItem} = 'family',1, iif({panel.contextItem} = 'friends',1, iif({panel.contextItem} = 'school',0, iif({panel.contextItem} = 'internet',0, iif({panel.contextItem} = 'future_work',0, iif({panel.contextItem} = 'other_country',1,0)))))))"
+                  "expression": "iif({panel.contextItem} = 'alone_reader',0, iif({panel.contextItem} = 'family',1, iif({panel.contextItem} = 'friends',1, iif({panel.contextItem} = 'school',0, iif({panel.contextItem} = 'internet',0, iif({panel.contextItem} = 'future_work',0, iif({panel.contextItem} = 'other_country',1, iif({panel.contextItem} = 'after_school',1, 0))))))))"
                 },
                 {
                   "type": "expression",
                   "name": "ctx_written_tag",
                   "visible": false,
-                  "expression": "iif({panel.contextItem} = 'alone_reader',1, iif({panel.contextItem} = 'family',0, iif({panel.contextItem} = 'friends',0, iif({panel.contextItem} = 'school',1, iif({panel.contextItem} = 'internet',1, iif({panel.contextItem} = 'future_work',1, iif({panel.contextItem} = 'other_country',0,0)))))))"
+                  "expression": "iif({panel.contextItem} = 'alone_reader',1, iif({panel.contextItem} = 'family',0, iif({panel.contextItem} = 'friends',0, iif({panel.contextItem} = 'school',1, iif({panel.contextItem} = 'internet',1, iif({panel.contextItem} = 'future_work',1, iif({panel.contextItem} = 'other_country',0, iif({panel.contextItem} = 'after_school',0, 0))))))))"
                 },
                 {
                   "type": "paneldynamic",
                   "name": "languages",
-                  "title": "3) Language(s) used in this context",
+                  "title": "What language are you using ?",
                   "panelCount": 1,
                   "minPanelCount": 1,
                   "panelsState": "firstExpanded",
@@ -352,7 +347,7 @@
                     {
                       "type": "dropdown",
                       "name": "languageCode",
-                      "title": "Language",
+                      "title": "Choose a language",
                       "isRequired": true,
                       "choices": [
                         {
@@ -415,7 +410,7 @@
                     {
                       "type": "text",
                       "name": "years",
-                      "title": "How many years have you used this language in this context?",
+                      "title": "For how many years ?",
                       "inputType": "number",
                       "validators": [
                         {
@@ -428,7 +423,7 @@
                     {
                       "type": "dropdown",
                       "name": "frequency",
-                      "title": "Frequency (for this passion in this context)",
+                      "title": "Frequency",
                       "choices": [
                         {
                           "value": 0,
@@ -539,13 +534,13 @@
               "type": "expression",
               "name": "passion_oral_tag",
               "visible": false,
-              "expression": "iif({panel.passionItem} = 'watch_films_series' or {panel.passionItem}='watch_tutorials' or {panel.passionItem}='listen_music' or {panel.passionItem}='sing' or {panel.passionItem}='play_instrument' or {panel.passionItem}='listen_podcasts' or {panel.passionItem}='board_games' or {panel.passionItem}='phone_calls' or {panel.passionItem}='role_play' or {panel.passionItem}='sports' or {panel.passionItem}='visit_museum', 1, 0)"
+              "expression": "iif({panel.passionItem}='board_games' or {panel.passionItem}='listen_music' or {panel.passionItem}='listen_podcasts' or {panel.passionItem}='phone_calls' or {panel.passionItem}='play_instrument' or {panel.passionItem}='role_play' or {panel.passionItem}='sing' or {panel.passionItem}='sports' or {panel.passionItem}='visit_museum' or {panel.passionItem}='watch_films_series', 1, 0)"
             },
             {
               "type": "expression",
               "name": "passion_written_tag",
               "visible": false,
-              "expression": "iif({panel.passionItem} = 'read_text' or {panel.passionItem}='write_stories' or {panel.passionItem}='draw' or {panel.passionItem}='take_photos' or {panel.passionItem}='edit_videos' or {panel.passionItem}='create_online_content' or {panel.passionItem}='play_video_games' or {panel.passionItem}='do_research' or {panel.passionItem}='describe_passion', 1, 0)"
+              "expression": "iif({panel.passionItem}='create_online_content' or {panel.passionItem}='describe_passion' or {panel.passionItem}='do_research' or {panel.passionItem}='draw' or {panel.passionItem}='edit_videos' or {panel.passionItem}='play_video_games' or {panel.passionItem}='read_text' or {panel.passionItem}='take_photos' or {panel.passionItem}='write_stories', 1, 0)"
             },
             {
               "type": "expression",
@@ -631,7 +626,7 @@
     },
     {
       "name": "results",
-      "title": "Your profile (preview)",
+      "title": "Your profile",
       "elements": [
         {
           "type": "html",
@@ -639,15 +634,20 @@
           "html": "<div style=\"display:flex; gap:16px; align-items:center; padding:12px; border:1px solid #e5e7eb; border-radius:16px;\"><div style=\"flex:0 0 auto;\"><img src=\"{profileImageUrl}\" alt=\"{profileTitle} illustration\" style=\"width:120px; height:auto; border-radius:16px;\"/></div><div style=\"flex:1 1 auto;\"><h3 style=\"margin:0 0 6px 0;\">{profileTitle}</h3><p style=\"margin:0; line-height:1.35;\">{profileDescription}</p></div></div>"
         },
         {
+          "type": "html",
+          "name": "mindmap_view",
+          "html": "<h3 style=\"margin:14px 0 8px 0\">Your mind map</h3><svg id=\"mindmapSvg\" style=\"width:100%;height:520px;background:#fff;border:1px solid #e5e7eb;border-radius:16px\"></svg><p style=\"font-size:12px;color:#64748b;margin:6px 0 0 0\">Scroll to zoom, drag to pan. Click nodes to fold/unfold.</p>"
+        },
+        {
           "type": "expression",
           "name": "show_engagement",
-          "title": "Engagement (Active/Passive)",
+          "title": "Engagement rate",
           "expression": "{engagement} + ' (FM total, non-English only: ' + {fmTotal} + ')'"
         },
         {
           "type": "expression",
           "name": "show_modality",
-          "title": "Modality (derived from passions + contexts)",
+          "title": "Favorite modality",
           "expression": "{style} + ' (oral score: ' + {oralTotal} + ', written score: ' + {writtenTotal} + ')'"
         },
         {
@@ -947,6 +947,131 @@
 
     const surveyJson = safeJsonParse("survey-json");
     const survey = new Survey.Model(surveyJson);
+
+    // ----------------------------
+    // Mind map (Markmap) rendering
+    // ----------------------------
+    function _choicesToMap(choices) {
+      const map = {};
+      (choices || []).forEach(c => {
+        if (c && typeof c === "object" && "value" in c) map[c.value] = c.text ?? String(c.value);
+        else map[c] = String(c);
+      });
+      return map;
+    }
+
+    function _findChoicesByName(elements, targetName) {
+      if (!Array.isArray(elements)) return null;
+      for (const el of elements) {
+        if (!el) continue;
+        if (el.name === targetName && el.choices) return el.choices;
+        // Dive into nested structures used by paneldynamic
+        const nested = []
+          .concat(el.elements || [])
+          .concat(el.templateElements || [])
+          .concat(el.panels || [])
+          .concat(el.questions || []);
+        const found = _findChoicesByName(nested, targetName);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    const _passionMap = _choicesToMap(_findChoicesByName(surveyJson.pages?.[1]?.elements, "passionItem") || []);
+    const _contextMap = _choicesToMap(_findChoicesByName(surveyJson.pages?.[1]?.elements, "contextItem") || []);
+    const _langMap = _choicesToMap(_findChoicesByName(surveyJson.pages?.[1]?.elements, "languageCode") || []);
+    const _freqMap = _choicesToMap(_findChoicesByName(surveyJson.pages?.[1]?.elements, "frequency") || []);
+
+    function _label(map, value) {
+      if (value === null || value === undefined) return "";
+      return map[value] || String(value);
+    }
+
+    function buildMindmapMarkdown(data) {
+      const name = data.student_full_name || "Student";
+      const profile = data.profileTitle || data.profileKey || "";
+      const md = [];
+      md.push(`# ${name}`);
+      md.push(`## Profile`);
+      if (profile) md.push(`- ${profile}`);
+      if (data.engagement) md.push(`- Engagement: ${data.engagement}`);
+      if (data.style) md.push(`- Modality: ${data.style}`);
+
+      md.push(`## Answers`);
+      const passions = Array.isArray(data.passions) ? data.passions : [];
+      if (!passions.length) {
+        md.push(`- (no passions provided)`);
+        return md.join("\n");
+      }
+
+      passions.forEach((p, pi) => {
+        let passionText = _label(_passionMap, p.passionItem) || `Passion ${pi+1}`;
+        if (p.passionItem === 'other' && p['passionItem-Comment']) passionText = p['passionItem-Comment'];
+        const detail = p.passionDetail ? ` — ${p.passionDetail}` : "";
+        md.push(`- ${passionText}${detail}`);
+
+        const contexts = Array.isArray(p.contexts) ? p.contexts : [];
+        if (!contexts.length) {
+          md.push(`  - (no contexts)`);
+          return;
+        }
+
+        contexts.forEach((c, ci) => {
+          let ctxText = _label(_contextMap, c.contextItem) || `Context ${ci+1}`;
+          if (c.contextItem === 'other' && c['contextItem-Comment']) ctxText = c['contextItem-Comment'];
+          md.push(`  - ${ctxText}`);
+
+          const langs = Array.isArray(c.languages) ? c.languages : [];
+          if (!langs.length) {
+            md.push(`    - (no languages)`);
+            return;
+          }
+
+          langs.forEach((l, li) => {
+            let langText = "";
+            if (l.languageCode === "OTHER") langText = l.languageOtherName || "Other";
+            else langText = _label(_langMap, l.languageCode) || l.languageCode || `Language ${li+1}`;
+
+            const years = (l.years === 0 || l.years) ? `, ${l.years}y` : "";
+            const freq = (l.frequency === 0 || l.frequency) ? `, ${_label(_freqMap, l.frequency)}` : "";
+            const inc = (l.wantIncrease === true) ? ", wants more" : (l.wantIncrease === false ? ", doesn't want more" : "");
+            md.push(`    - ${langText}${years}${freq}${inc}`);
+          });
+        });
+      });
+
+      return md.join("\n");
+    }
+
+    let _mmTransformer = null;
+    function renderMindmap(data, svgEl) {
+      if (!svgEl) return;
+      if (!window.markmap || !window.markmap.Transformer || !window.markmap.Markmap) {
+        svgEl.outerHTML = "<div style='padding:12px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px;color:#991b1b'>Mindmap library not loaded. Check your internet connection or CDN links.</div>";
+        return;
+      }
+      if (!_mmTransformer) _mmTransformer = new window.markmap.Transformer();
+      const markdown = buildMindmapMarkdown(data);
+      const { root } = _mmTransformer.transform(markdown);
+      svgEl.innerHTML = "";
+      window.markmap.Markmap.create(svgEl, null, root);
+    }
+
+    // Render when the mindmap HTML question appears
+    survey.onAfterRenderQuestion.add((sender, options) => {
+      if (options.question?.name !== "mindmap_view") return;
+      const svg = options.htmlElement.querySelector("#mindmapSvg");
+      renderMindmap(sender.data, svg);
+    });
+
+    // Re-render live when answers change and the user is on the results page
+    survey.onValueChanged.add((sender) => {
+      if (sender.currentPage?.name !== "results") return;
+      const svg = document.getElementById("mindmapSvg");
+      if (svg) renderMindmap(sender.data, svg);
+    });
+
+
 
     try {
       if (window.SurveyTheme && SurveyTheme.LayeredLightPanelless) {
