@@ -1,4 +1,152 @@
-{
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Language & Passions Questionnaire</title>
+
+  <!-- SurveyJS core + UI -->
+  <link rel="stylesheet" href="https://unpkg.com/survey-core/survey-core.min.css">
+  <script src="https://unpkg.com/survey-core/survey.core.min.js"></script>
+  <script src="https://unpkg.com/survey-js-ui/survey-js-ui.min.js"></script>
+
+  <!-- A modern built-in theme (recommended approach) -->
+  <script src="https://unpkg.com/survey-core/themes/layered-light-panelless.min.js"></script>
+
+  <style>
+    :root{
+      --bg1:#f7f7ff;
+      --bg2:#f2fbff;
+      --card:#ffffffcc;
+      --stroke:#e7e7ee;
+      --text:#0f172a;
+      --muted:#64748b;
+      --shadow: 0 20px 60px rgba(15, 23, 42, .10);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, var(--bg2), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, var(--bg1), transparent 55%),
+        linear-gradient(180deg, #ffffff, #fafafa);
+      padding: 22px;
+    }
+
+    .wrap{ max-width: 980px; margin: 0 auto; }
+
+    header{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin-bottom: 16px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size: clamp(22px, 2.6vw, 34px);
+      letter-spacing:-0.02em;
+    }
+
+    .brand p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.35;
+      max-width: 56ch;
+    }
+
+    .pill{
+      align-self:flex-start;
+      padding: 8px 12px;
+      border:1px solid var(--stroke);
+      background:#fff;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      box-shadow: 0 8px 24px rgba(15,23,42,.05);
+      user-select:none;
+    }
+
+    .card{
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    #surveyContainer{
+      margin-top: 4px;
+    }
+
+    .status{
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: #fff;
+      color: var(--muted);
+      font-size: 13px;
+      display:none;
+    }
+    .status.show{ display:block; }
+    .status.ok{ border-color:#bbf7d0; background:#f0fdf4; color:#166534; }
+    .status.err{ border-color:#fecaca; background:#fef2f2; color:#991b1b; }
+
+    footer{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    /* Small screens */
+    @media (max-width: 640px){
+      body{ padding:14px; }
+      .card{ padding:14px; }
+      header{ flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Language & Passions</h1>
+        <p>
+          Add passions → contexts → languages. Fill only what you know, and you can modify anytime before submitting.
+        </p>
+      </div>
+      <div class="pill">Student questionnaire • SurveyJS</div>
+    </header>
+
+    <div class="card">
+      <div id="surveyContainer"></div>
+      <div id="status" class="status"></div>
+
+      <footer>
+        Tip: if the page is blank, open DevTools → Console. Most issues are a missing JSON paste or a wrong webhook URL.
+      </footer>
+    </div>
+  </div>
+
+  <!-- ✅ Paste your FULL SurveyJS JSON here (pure JSON, no trailing commas) -->
+  <script id="survey-json" type="application/json">
+  {
   "title": "Language & Passions Questionnaire",
   "description": "Fill in as many details as you want. You can add multiple passions, contexts, and languages.",
   "completedHtml": "<h3>Thank you!</h3><p><b>Main linguistic profile:</b> {profileTitle}<br/><b>Engagement:</b> {engagement}<br/><b>Modality (derived):</b> {style}</p>",
@@ -295,3 +443,6 @@
     { "name": "profile", "expression": "{profileTitle} + ': ' + {profileDescription}", "includeIntoResult": true }
   ]
 }
+  </script>
+</body>
+</html>
